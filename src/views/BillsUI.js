@@ -23,7 +23,7 @@ const rows = (data) => {
   // Vérifie qu'il y ait bien des datas
   if (!data || !data.length) return "";
 
-  // Trier les bbills du plus récent au moins récent
+  // Trier les bills du plus récent au moins récent
   const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   //retourne les datas triées
