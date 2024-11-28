@@ -131,24 +131,25 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    this.counters = this.counters || {}; // Initialisation des compteurs
-    if (this.counters[index] === undefined) this.counters[index] = 0;
+    if (this.counter === undefined || this.index !== index) this.counter = 0
+    if (this.index === undefined || this.index !== index) this.index = index
 
-    if (this.counters[index] % 2 === 0) {
-      $(`#arrow-icon${index}`).css({ transform: 'rotate(0deg)' });
-      $(`#status-bills-container${index}`)
-        .html(cards(filteredBills(bills, getStatus(index))));
+
+    if (this.counter % 2 === 0) {
+      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)' })
+      $(`#status-bills-container${this.index}`)
+        .html(cards(filteredBills(bills, getStatus(this.index))))
+      this.counter++
     } else {
-      $(`#arrow-icon${index}`).css({ transform: 'rotate(90deg)' });
-      $(`#status-bills-container${index}`).html("");
+      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)' })
+      $(`#status-bills-container${this.index}`)
+        .html("")
+      this.counter++
     }
-    this.counters[index]++;
-
     bills.forEach(bill => {
-      const billElement = $(`#open-bill${bill.id}`);
-      billElement.off("click"); // Supprimer les anciens gestionnaires
-      billElement.click((e) => this.handleEditTicket(e, bill, bills));
-    });
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    })
+    return bills
   }
 
   getBillsAllUsers = () => {
