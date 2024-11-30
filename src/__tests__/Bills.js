@@ -8,6 +8,7 @@ import { bills } from "../fixtures/bills.js"
 import { ROUTES_PATH } from "../constants/routes.js";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 
+import Bills from '../containers/Bills.js';
 import router from "../app/Router.js";
 
 describe("Given I am connected as an employee", () => {
@@ -36,5 +37,45 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
+
+
+    describe("When i click on new bill button", () => {
+      test("Then it should open the New Bill page", () => {
+        // Simule un bouton dans le DOM
+        document.body.innerHTML = `<button data-testid="btn-new-bill"></button>`;
+        // Mock de la fonction onNavigate
+        const onNavigate = jest.fn();
+
+        // Instancie la classe Bills
+        new Bills({ document, onNavigate });
+
+        // Récupère le bouton et simule un clic
+        document.querySelector('[data-testid="btn-new-bill"]').click();
+
+        // Vérifie que onNavigate a été appelée
+        expect(onNavigate).toHaveBeenCalled();
+      });
+    });
+    describe('When I click on the icon eye', () => {
+      test('A modal should open', () => {
+        // Simule le DOM contenant des icônes iconEye et le modal
+        document.body.innerHTML = `
+          <div data-testid="icon-eye" data-bill-url="http://example.com/bill"></div>          
+        `;
+
+        // Mock de $modal()
+        $.fn.modal = jest.fn();
+
+        // Instanciation de la classe Bills
+        new Bills({ document });
+
+        // Simulation d'un clic
+        document.querySelector('[data-testid="icon-eye"]').click();
+
+        // Vérification que la modal est ouverte
+        expect($.fn.modal).toHaveBeenCalledWith("show");
+      });
+    });
   })
 })
+
