@@ -10,6 +10,7 @@ import { localStorageMock } from "../__mocks__/localStorage.js";
 
 import Bills from '../containers/Bills.js';
 import router from "../app/Router.js";
+import { formatDate, formatStatus } from "../app/format.js";
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
@@ -77,5 +78,24 @@ describe("Given I am connected as an employee", () => {
       });
     });
   })
-})
 
+  describe("When I arrive on page", () => {
+    test("Then it should return stored bills ", async () => {
+
+      //Simulation du store avec les notes de frais
+      const mockedStore = {
+        bills: jest.fn(() => ({
+          list: jest.fn(() => Promise.resolve([{ date: "2024-12-01", status: "pending" }])),
+        })),
+      };
+
+
+      const newBill = new Bills({ document, store: mockedStore });
+
+      const bill = await newBill.getBills();
+
+      // Utilise les fonctions de formatage pour correspondre au réel
+      expect(bill).toEqual([{ date: formatDate("2024-12-01"), status: formatStatus("pending") },]);
+    });
+  });
+})
