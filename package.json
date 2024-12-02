@@ -2,7 +2,7 @@
   "scripts": {
     "test": "jest --coverage --noStackTrace --silent"
   },
-  "jest": {
+  "jest":{
     "verbose": false,
     "setupFiles": [
       "./setup-jest.js"
@@ -17,7 +17,7 @@
     ],
     "collectCoverage": true,
     "coverageReporters":["html"]
-  },
+    },
   "type": "module",
   "dependencies": {
     "express": "^4.17.1",
