@@ -108,3 +108,71 @@ describe("Given I am connected as an employee", () => {
     });
   });
 });
+
+// test d'intégration POST
+describe("Given I am connected as Employee", () => {
+  describe("When I submit a bill", () => {
+    test("Then it should post the bill", async () => {
+      const html = NewBillUI();
+      document.body.innerHTML = html;
+      window.localStorage.setItem("user", JSON.stringify({ email: "employee@test.tld" }));
+
+      const onNavigate = jest.fn();
+      // Instancier NewBill
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: mockStore,
+        localStorage: window.localStorage,
+      });
+
+      // spy méthode create
+      const mockCreate = jest.spyOn(mockStore.bills(), "create");
+
+      // Simuler un fichier valide
+      const validFile = new File([], "test.png", { type: "image/png" });
+      fireEvent.change(screen.getByTestId("file"), { target: { files: [validFile] } });
+
+      // Simuler l'envoi du formulaire
+      const form = screen.getByTestId("form-new-bill");
+      fireEvent.submit(form);
+
+      // Attend la résolution des taches
+      await new Promise(process.nextTick);
+
+      // Vérifier que create (méthode de newBIll) ait été appelée
+      expect(mockCreate).toHaveBeenCalled();
+
+      // Vérifier le renvoi vers la page des notes de frais 
+      expect(onNavigate).toHaveBeenCalledWith("#employee/bills");
+    });
+  });
+  describe("And an error on API", () => {
+    test("Then it fails with error message", async () => {
+
+      const html = NewBillUI();
+      document.body.innerHTML = html;
+      window.localStorage.setItem("user", JSON.stringify({ email: "employee@test.tld" }));
+
+      // Simule une erreur 404 pour create
+      mockStore.bills().create.mockRejectedValueOnce(new Error("Erreur"));
+
+      const onNavigate = jest.fn();
+      const newBill = new NewBill({
+        document,
+        onNavigate,
+        store: mockStore,
+        localStorage: window.localStorage,
+      });
+
+      // Simule la soumission du formulaire
+      const validFile = new File([], "test.png", { type: "image/png" });
+      fireEvent.change(screen.getByTestId("file"), { target: { files: [validFile] } });
+      fireEvent.submit(screen.getByTestId("form-new-bill"));
+
+      // Vérifier que le message d'erreur est affiché
+      const message = await screen.findByText(/Erreur/);
+      expect(message).toBeTruthy();
+    });
+  });
+});
