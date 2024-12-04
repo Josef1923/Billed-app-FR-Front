@@ -76,4 +76,35 @@ describe("Given I am connected as an employee", () => {
       expect(email).toBe("employee@test.tld");
     });
   })
+  describe("When the form is submitted", () => {
+    test("Then it should call updateBill and onNavigate", () => {
+      const html = NewBillUI();
+      document.body.innerHTML = html;
+      window.localStorage.setItem("user", JSON.stringify({ email: "employee@test.tld" }));
+
+      const newBill = new NewBill({
+        document,
+        onNavigate: jest.fn(),
+        store: mockStore,
+        localStorage: window.localStorage,
+      });
+
+      // Spy la méthode updateBill
+      const updateBillSpy = jest.spyOn(newBill, "updateBill");
+
+      // Spy la méthode onNavigate
+      const onNavigateSpy = jest.fn();
+      newBill.onNavigate = onNavigateSpy;
+
+      // Simuler la soumission du formulaire
+      const form = screen.getByTestId("form-new-bill");
+      fireEvent.submit(form);
+
+      // Vérifier que updateBill a bien été appelé avec l'objet 'bill'
+      expect(updateBillSpy).toHaveBeenCalled();
+
+      // Vérifier que onNavigate a bien été appelé
+      expect(onNavigateSpy).toHaveBeenCalled();
+    });
+  });
 });

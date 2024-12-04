@@ -16,8 +16,8 @@
       "!**/lcov-report/**"
     ],
     "collectCoverage": true,
-    "coverageReporters":["html"]    
-    },
+    "coverageReporters":["html"]
+},
   "type": "module",
   "dependencies": {
     "express": "^4.17.1",
