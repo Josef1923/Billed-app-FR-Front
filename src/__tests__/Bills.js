@@ -102,7 +102,7 @@ describe("Given I am connected as an employee", () => {
 })
 
 //simule API
-jest.mock("../app/store", () => ({
+jest.mock("../app/Store", () => ({
   bills: jest.fn(() => ({
     list: jest.fn(() =>
       Promise.resolve([

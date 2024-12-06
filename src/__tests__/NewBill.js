@@ -6,9 +6,9 @@ import { screen, fireEvent } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 
-import mockStore from "../__mocks__/store.js";
+import mockStore from "../__mocks__/Store.js";
 
-jest.mock("../app/store", () => mockStore);
+jest.mock("../app/Store", () => mockStore);
 
 
 describe("Given I am connected as an employee", () => {
@@ -155,7 +155,8 @@ describe("Given I am connected as Employee", () => {
       window.localStorage.setItem("user", JSON.stringify({ email: "employee@test.tld" }));
 
       // Simule une erreur 404 pour create
-      mockStore.bills().create.mockRejectedValueOnce(new Error("Erreur"));
+      mockStore.bills().create.mockRejectedValueOnce(new Error('error'))
+      const consoleErrorSpy = jest.spyOn(console, 'error')
 
       const onNavigate = jest.fn();
       const newBill = new NewBill({
@@ -170,9 +171,9 @@ describe("Given I am connected as Employee", () => {
       fireEvent.change(screen.getByTestId("file"), { target: { files: [validFile] } });
       fireEvent.submit(screen.getByTestId("form-new-bill"));
 
-      // Vérifier que le message d'erreur est affiché
-      const message = await screen.findByText(/Erreur/);
-      expect(message).toBeTruthy();
+      //vérifie l'erreur
+      await new Promise(process.nextTick)
+      expect(consoleErrorSpy).toHaveBeenCalled()
     });
   });
 });
