@@ -6,7 +6,7 @@ import { screen, fireEvent } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 
-import mockStore from "../__mocks__/Store.js";
+import mockStore from "../__mocks__/store.js";
 
 jest.mock("../app/Store", () => mockStore);
 

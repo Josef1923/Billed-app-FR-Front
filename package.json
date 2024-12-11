@@ -13,10 +13,11 @@
       "!**/assets/**",
       "!**/external/**",
       "!**/fixtures/**",
-      "!**/lcov-report/**"
-    ],
-    "collectCoverage": true,
-    "coverageReporters":["html"]
+      "!**/lcov-report/**",
+      "!**/block-navigation.js",
+      "!**/prettify.js",
+      "!**/sorter.js"
+    ]
 },
   "type": "module",
   "dependencies": {
